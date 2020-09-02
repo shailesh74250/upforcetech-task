@@ -7,12 +7,14 @@ import Button from '../../components/Button';
 import Label from '../../components/Label';
 import Pagination from '../../components/Pagination';
 
+const minLimit = 0;
+const maxLimit = 6;
 function List() {
   const [searchValue, setSearchValue] = useState('');
   const [previousDisable, setPreviousDisable] = useState(false);
   const [nextDisable, setNextDisable] = useState(false);
-  const [previous, setPrevious] = useState(0);
-  const [next, setNext] = useState(6);
+  const [previous, setPrevious] = useState(minLimit);
+  const [next, setNext] = useState(maxLimit);
   const { state, dispatch } = useContext(ListContext);
 
   const header = [
@@ -31,21 +33,21 @@ function List() {
   const body = state.shipments.slice(previous, next);
 
   const handlePrevious = () => {
-    if (previous > 0) {
-      setPrevious(previous - 6);
-      setNext(next - 6);
+    if (previous > minLimit) {
+      setPrevious(previous - maxLimit);
+      setNext(next - maxLimit);
       setNextDisable(false);
-    } else if (previous === 0) {
+    } else if (previous === minLimit) {
       setPreviousDisable(true);
       setNextDisable(false);
     }
   };
   const handleNext = () => {
     if (next < state.shipments.length) {
-      setNext(next + 6);
-      setPrevious(previous + 6);
+      setNext(next + maxLimit);
+      setPrevious(previous + maxLimit);
       setPreviousDisable(false);
-    } else if (next === state.shipments.length || previous < 0) {
+    } else if (next === state.shipments.length || previous < minLimit) {
       setNextDisable(true);
     }
   };
